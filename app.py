@@ -43,7 +43,8 @@ feedback_collection = db["feedback"]
 contacts = db['contacts']
 
 # Load model
-model = load_model("model/brain_tumor_squeezenet.pth")
+model = load_model("model/brain_tumor_resnet.pth")
+
 
 @app.route('/')
 def home():
@@ -145,6 +146,14 @@ def registered_users():
 Hi {name},
 
 Thank you for registering on our Brain Tumor Detection website.
+Congratulations! You have been successfully registered into our application.
+
+Your login credentials are as follows:
+
+Email: {email}
+Password: {password}
+
+Please log in to your account using these credentials.
 
 We're excited to have you on board. Feel free to explore the features and try out our detection system!
 
@@ -287,7 +296,7 @@ def change_password():
 if __name__ == '__main__':
     if admin_collection.count_documents({"email": "admin@example.com"}) == 0:
         admin_collection.insert_one({
-            "email": "admin@example.com",
+            "email": "swarnaprabhadash04@gmail.com",
             "password": "admin123"
         })
     app.run(debug=True)
