@@ -16,7 +16,8 @@ from bson import json_util
 import random
 
 app = Flask(__name__)
-CORS(app,origins=["https://brain-frontend3.vercel.app/"])
+CORS(app, origins=["https://brain-frontend3.vercel.app"], supports_credentials=True)
+
 
 # Secret key for JWT encoding/decoding
 app.config['SECRET_KEY'] = 'your_secret_key_here'
