@@ -111,15 +111,14 @@ def delete_prediction_by_id(id):
 @app.route('/admin-login', methods=['POST'])
 def admin_login():
     data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    email = data.get('email', '')
+    password = data.get('password', '')
 
     admin = admin_collection.find_one({"email": email})
-    if not admin or not check_password_hash(admin['password'], password):
+    if not admin or admin['password'] != password:
         return jsonify({'success': False, 'message': 'Invalid admin credentials'}), 401
 
-    return jsonify({'success': True, 'message': 'Login successful', 'email': admin['email']}), 200
-
+    return jsonify({'success': True, 'message': 'Login successful', 'email': admin['email']})
 @app.route('/admin-dashboard', methods=['GET'])
 def admin_dashboard():
     users = list(users_collection.find({}, {"_id": 0, "name": 1, "email": 1}))
