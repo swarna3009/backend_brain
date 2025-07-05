@@ -276,6 +276,6 @@ if __name__ == '__main__':
     if admin_collection.count_documents({"email": "pranshujena2511@gmail.com"}) == 0:
         admin_collection.insert_one({
             "email": "pranshujena2511@gmail.com",
-            "password": generate_password_hash("admin123")
+            "password": "admin123"
         })
     app.run(debug=True, host='0.0.0.0', port=5000)
