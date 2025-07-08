@@ -69,6 +69,11 @@ SUPER_ADMIN_EMAIL = "pranshujena2511@gmail.com"
 def home():
     return "Brain Tumor Detection API"
 
+@app.route("/ping", methods=["GET"])
+def ping():
+    return jsonify({"status": "OK", "message": "Server is alive"}), 200
+
+
 # -------------------- PREDICTION --------------------
 @app.route("/generate-captcha")
 def generate_captcha():
