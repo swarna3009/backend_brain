@@ -63,7 +63,7 @@ pending_users = {}
 
 
 SUPER_ADMIN_EMAIL = "pranshujena2511@gmail.com"
-#FRONTEND_URL = "http://localhost:5173"  # Change on deploy
+FRONTEND_URL = "https://brain-frontend3.vercel.app"  # Change on deploy
 
 @app.route('/')
 def home():
