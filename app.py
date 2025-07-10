@@ -277,15 +277,41 @@ def verify_admin_otp():
 @app.route('/admin-login', methods=['POST'])
 def admin_login():
     data = request.get_json()
-    email, password = data.get('email'), data.get('password')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return jsonify({'success': False, 'message': 'Email and password required'}), 400
+
     admin = admin_collection.find_one({"email": email})
     if not admin:
         return jsonify({'success': False, 'message': 'Admin not found'}), 404
-    if admin['password'] != password:
-        return jsonify({'success': False, 'message': 'Incorrect password'}), 401
+
+    # Check if it's the Super Admin
+    if email == SUPER_ADMIN_EMAIL:
+        if admin['password'] == password:
+            return jsonify({
+                'success': True,
+                'message': 'Super Admin login successful',
+                'role': 'super_admin',
+                'email': email
+            }), 200
+        else:
+            return jsonify({'success': False, 'message': 'Incorrect password'}), 401
+
+    # Regular admin
     if admin['status'] != "approved":
         return jsonify({'success': False, 'message': 'Access not yet approved'}), 403
-    return jsonify({'success': True, 'message': 'Login successful', 'email': email}), 200
+
+    if admin['password'] != password:
+        return jsonify({'success': False, 'message': 'Incorrect password'}), 401
+
+    return jsonify({
+        'success': True,
+        'message': 'Admin login successful',
+        'role': 'admin',
+        'email': email
+    }), 200
 
 @app.route('/admin-dashboard', methods=['GET'])
 def admin_dashboard():
