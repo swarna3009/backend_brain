@@ -13,8 +13,15 @@ from captcha.image import ImageCaptcha
 import re
 
 
+CORS(
+    app,
+    resources={r"/*": {"origins": "https://brain-frontend-njm8.vercel.app"}},
+    supports_credentials=True
+)
 app = Flask(__name__)
-CORS(app)
+@app.route('/<path:path>', methods=['OPTIONS'])
+def options_handler(path):
+    return '', 204
 
 
 
