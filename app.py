@@ -12,19 +12,10 @@ from flask import send_file,session
 from captcha.image import ImageCaptcha
 import re
 
-app = Flask(__name__)
 
-CORS(
-    app,
-    resources={
-        r"/*": {
-            "origins": [
-                "https://brain-frontend-njm8.vercel.app"
-            ]
-        }
-    },
-    supports_credentials=True
-)
+app = Flask(__name__)
+CORS(app)
+
 
 
 # Secret key
@@ -75,7 +66,7 @@ pending_users = {}
 
 
 SUPER_ADMIN_EMAIL = "pranshujena2511@gmail.com"
-FRONTEND_URL = "https://brain-frontend3.vercel.app"  # Change on deploy
+FRONTEND_URL = "https://brain-frontend-njm8.vercel.app"  # Change on deploy
 
 @app.route('/')
 def home():
