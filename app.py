@@ -16,9 +16,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/<path:path>', methods=['OPTIONS'])
-def options_handler(path):
-    return '', 204
+
 
 
 
@@ -327,9 +325,19 @@ def admin_dashboard():
 
 
 # -------------------- USER REGISTRATION + OTP --------------------
-@app.route('/user-register', methods=['GET','POST'])
+@app.route('/user-register', methods=['GET', 'POST'])
 def register_user():
+
+    # If someone opens the URL in browser
+    if request.method == "GET":
+        return jsonify({"message": "User Register API is running"}), 200
+
+    # Ensure request is JSON
+    if not request.is_json:
+        return jsonify({'success': False, 'message': 'Content-Type must be application/json'}), 415
+
     data = request.get_json()
+
     name = data.get('name')
     email = data.get('email', '').strip().lower()
     password = data.get('password')
@@ -363,8 +371,11 @@ def register_user():
                Go to Home</a>
         </div>
         """
+
         mail.send(msg)
+
         return jsonify({'success': True, 'message': 'OTP sent to email'})
+
     except Exception as e:
         print("Mail error:", e)
         return jsonify({'success': False, 'message': 'Failed to send OTP'}), 500
