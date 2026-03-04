@@ -391,7 +391,11 @@ def register_user():
 
     except Exception as e:
         print("MAIL ERROR:", str(e))
-        return jsonify({'success': False, 'message': 'Email service error'}), 500
+        return jsonify({
+            "success": False,
+            "message": "Email service error",
+            "error": str(e)
+        }), 500
 
 
 @app.route('/verify-otp', methods=['POST'])
