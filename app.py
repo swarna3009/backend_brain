@@ -11,6 +11,7 @@ import io, bcrypt, jwt, smtplib,time,secrets, random
 from flask import send_file,session
 from captcha.image import ImageCaptcha
 import re
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -519,4 +520,4 @@ if __name__ == '__main__':
             "password": "admin123",
             "status": "approved"
         })
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
