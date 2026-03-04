@@ -57,7 +57,7 @@ client = MongoClient(uri)
 db = client["brain_tumor_db"]
 
 # Collections
-model = load_model("model/brain_tumor_resnet.pth")
+model = None
 history_collection = db["prediction_history"]
 admin_collection = db["admin_users"]
 users_collection = db["registered_users"]
@@ -117,17 +117,27 @@ def verify_captcha():
 # ========== PREDICTION ==========
 @app.route('/predict', methods=['POST'])
 def predict():
+    global model
+
+    # Load the model only when prediction is requested
+    if model is None:
+        print("Loading ML model...")
+        model = load_model("model/brain_tumor_resnet.pth")
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
     file = request.files['file']
+
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
     try:
         email = request.form.get('email', 'unknown')
+
         image_bytes = io.BytesIO(file.read())
         image_tensor = transform_image(image_bytes)
+
         prediction = get_prediction(model, image_tensor)
 
         history_collection.insert_one({
@@ -137,7 +147,9 @@ def predict():
         })
 
         return jsonify({'prediction': prediction})
+
     except Exception as e:
+        print("PREDICTION ERROR:", str(e))
         return jsonify({'error': str(e)}), 500
 
 @app.route("/history", methods=["GET"])
