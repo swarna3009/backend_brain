@@ -378,8 +378,8 @@ def register_user():
         return jsonify({'success': True, 'message': 'OTP sent to email'})
 
     except Exception as e:
-    print("MAIL ERROR:", str(e))
-    return jsonify({'success': False, 'message': 'Email service error'}), 500
+        print("MAIL ERROR:", str(e))
+        return jsonify({'success': False, 'message': 'Email service error'}), 500
 
 
 @app.route('/verify-otp', methods=['POST'])
