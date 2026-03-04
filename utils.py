@@ -21,6 +21,7 @@ transform_test = transforms.Compose([
 class_names = ["Glioma", "Meningioma", "No_Tumor", "pituitary"]
 
 
+# ===== LOAD MODEL =====
 def load_model(model_path="model/best_resnet18_4class.pth"):
 
     if not os.path.exists(model_path):
@@ -35,7 +36,12 @@ def load_model(model_path="model/best_resnet18_4class.pth"):
 
         gdown.download(url, model_path, quiet=False)
 
-    model = torch.load(model_path, map_location="cpu")
+    # IMPORTANT FIX for PyTorch 2.6+
+    model = torch.load(
+        model_path,
+        map_location="cpu",
+        weights_only=False
+    )
 
     model.eval()
 
@@ -44,6 +50,7 @@ def load_model(model_path="model/best_resnet18_4class.pth"):
     return model
 
 
+# ===== IMAGE TRANSFORM =====
 def transform_image(image_input):
 
     if isinstance(image_input, str):
@@ -64,6 +71,7 @@ def transform_image(image_input):
     return image_tensor
 
 
+# ===== PREDICTION =====
 def get_prediction(model, image_tensor):
 
     with torch.no_grad():
