@@ -327,7 +327,7 @@ def admin_dashboard():
 
 
 # -------------------- USER REGISTRATION + OTP --------------------
-@app.route('/user-register', methods=['POST'])
+@app.route('/user-register', methods=['GET','POST'])
 def register_user():
     data = request.get_json()
     name = data.get('name')
