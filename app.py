@@ -366,7 +366,7 @@ def register_user():
             <p>Thank you for registering.</p>
             <p><strong>Your OTP is:</strong> 
                <span style="color:#ffd700; font-size:20px;">{otp}</span></p>
-            <a href="https://brain-frontend3.vercel.app/"
+            <a href="https://brain-frontend-njm8.vercel.app/"
                style="background:#ffd700; color:#000; padding:10px 20px; text-decoration:none; border-radius:5px;">
                Go to Home</a>
         </div>
