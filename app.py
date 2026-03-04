@@ -27,6 +27,7 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'pranshujena2511@gmail.com'        # Change this
 app.config['MAIL_PASSWORD'] = 'gimxxcktgcchbdlf'                 # App password
 app.config['MAIL_DEFAULT_SENDER'] = ('Team TumorDetect', 'pranshujena2511@gmail.com')
