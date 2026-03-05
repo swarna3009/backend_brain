@@ -12,6 +12,7 @@ from flask import send_file,session
 from captcha.image import ImageCaptcha
 import re
 import os
+import requests
 
 app = Flask(__name__)
 CORS(app)
