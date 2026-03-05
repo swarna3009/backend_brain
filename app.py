@@ -341,11 +341,9 @@ def admin_dashboard():
 @app.route('/user-register', methods=['GET', 'POST'])
 def register_user():
 
-    # If someone opens the URL in browser
     if request.method == "GET":
         return jsonify({"message": "User Register API is running"}), 200
 
-    # Ensure request is JSON
     if not request.is_json:
         return jsonify({'success': False, 'message': 'Content-Type must be application/json'}), 415
 
@@ -372,31 +370,43 @@ def register_user():
     }
 
     try:
-        msg = Message('Your OTP for Brain Tumor Detection App', recipients=[email])
-        msg.html = f"""
-        <div style="font-family: Arial; background-color: #1a1a1a; color: #fff; padding: 20px;">
-            <h3>Hi {name},</h3>
-            <p>Thank you for registering.</p>
-            <p><strong>Your OTP is:</strong> 
-               <span style="color:#ffd700; font-size:20px;">{otp}</span></p>
-            <a href="https://brain-frontend-njm8.vercel.app/"
-               style="background:#ffd700; color:#000; padding:10px 20px; text-decoration:none; border-radius:5px;">
-               Go to Home</a>
-        </div>
-        """
 
-        mail.send(msg)
+        SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 
-        return jsonify({'success': True, 'message': 'OTP sent to email'})
+        headers = {
+            "Authorization": f"Bearer {SENDGRID_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "personalizations": [{
+                "to": [{"email": email}]
+            }],
+            "from": {"email": "pranshujena2511@gmail.com"},
+            "subject": "Brain Tumor Detection OTP",
+            "content": [{
+                "type": "text/plain",
+                "value": f"Hello {name}, your OTP is {otp}"
+            }]
+        }
+
+        response = requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            headers=headers,
+            json=data
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "OTP sent successfully"
+        })
 
     except Exception as e:
-        print("MAIL ERROR:", str(e))
+        print("EMAIL ERROR:", str(e))
         return jsonify({
             "success": False,
-            "message": "Email service error",
             "error": str(e)
         }), 500
-
 
 @app.route('/verify-otp', methods=['POST'])
 def verify_otp():
