@@ -80,39 +80,6 @@ def ping():
     return jsonify({"status": "OK", "message": "Server is alive"}), 200
 
 
-# -------------------- PREDICTION --------------------
-@app.route("/generate-captcha")
-def generate_captcha():
-    from captcha.image import ImageCaptcha
-    import random, string, io
-    from flask import session, send_file
-
-    # Use default font (no need to provide any font path)
-    image_captcha = ImageCaptcha(width=200, height=80)
-
-    # Generate random CAPTCHA text
-    captcha_text = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
-    session['captcha'] = captcha_text.lower()
-
-    # Render image to bytes buffer
-    buf = io.BytesIO()
-    image_captcha.write(captcha_text, buf)
-    buf.seek(0)
-
-    return send_file(buf, mimetype='image/png')
-
-
-@app.route("/verify-captcha", methods=["POST"])
-def verify_captcha():
-    data = request.get_json()
-    user_input = data.get("captcha", "").strip().lower()
-    expected = session.get("captcha", "")
-
-    if user_input == expected:
-        return jsonify({"success": True})
-    return jsonify({"success": False}), 400
-
-
 
 # ========== PREDICTION ==========
 @app.route('/predict', methods=['POST'])
